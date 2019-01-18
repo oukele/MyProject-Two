@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.ExpressMapper">
+  <resultMap id="BaseResultMap" type="com.oukele.model.Express">
+    <id column="express_id" jdbcType="INTEGER" property="expressId" />
+    <result column="express_number" jdbcType="VARCHAR" property="expressNumber" />
+    <result column="express_datetime" jdbcType="TIMESTAMP" property="expressDatetime" />
+    <result column="express_type_id" jdbcType="INTEGER" property="expressTypeId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from express
+    where express_id = #{expressId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oukele.model.Express">
+    insert into express (express_id, express_number, express_datetime, 
+      express_type_id)
+    values (#{expressId,jdbcType=INTEGER}, #{expressNumber,jdbcType=VARCHAR}, #{expressDatetime,jdbcType=TIMESTAMP}, 
+      #{expressTypeId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.oukele.model.Express">
+    update express
+    set express_number = #{expressNumber,jdbcType=VARCHAR},
+      express_datetime = #{expressDatetime,jdbcType=TIMESTAMP},
+      express_type_id = #{expressTypeId,jdbcType=INTEGER}
+    where express_id = #{expressId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select express_id, express_number, express_datetime, express_type_id
+    from express
+    where express_id = #{expressId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select express_id, express_number, express_datetime, express_type_id
+    from express
+  </select>
+</mapper>

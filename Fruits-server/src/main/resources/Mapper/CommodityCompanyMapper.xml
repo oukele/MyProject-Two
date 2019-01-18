@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.CommodityCompanyMapper">
+  <resultMap id="BaseResultMap" type="com.oukele.model.CommodityCompany">
+    <id column="commodity_company_id" jdbcType="INTEGER" property="commodityCompanyId" />
+    <result column="commodity_company_name" jdbcType="VARCHAR" property="commodityCompanyName" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from commodity_company
+    where commodity_company_id = #{commodityCompanyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oukele.model.CommodityCompany">
+    insert into commodity_company (commodity_company_id, commodity_company_name
+      )
+    values (#{commodityCompanyId,jdbcType=INTEGER}, #{commodityCompanyName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.oukele.model.CommodityCompany">
+    update commodity_company
+    set commodity_company_name = #{commodityCompanyName,jdbcType=VARCHAR}
+    where commodity_company_id = #{commodityCompanyId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select commodity_company_id, commodity_company_name
+    from commodity_company
+    where commodity_company_id = #{commodityCompanyId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select commodity_company_id, commodity_company_name
+    from commodity_company
+  </select>
+</mapper>

@@ -1,0 +1,32 @@
+POST http://localhost:8888/commodity
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-12-24T122556.415.html
+
+###
+
+GET http://localhost:8888/commodity/total
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-12-24T122514.200.json
+
+###
+
+POST http://localhost:8080/commodity
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-12-24T121535.404.html
+
+###
+
+POST http://localhost:8080/resources
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-12-24T121504.404.html
+
+###
+

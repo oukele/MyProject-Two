@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.CustomerMapper">
+  <resultMap id="BaseResultMap" type="com.oukele.model.Customer">
+    <id column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="customer_user" jdbcType="VARCHAR" property="customerUser" />
+    <result column="customer_password" jdbcType="VARCHAR" property="customerPassword" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="customer_photo" jdbcType="VARCHAR" property="customerPhoto" />
+    <result column="customer_tel" jdbcType="VARCHAR" property="customerTel" />
+    <result column="customer_card" jdbcType="VARCHAR" property="customerCard" />
+    <result column="customer_state" jdbcType="BIT" property="customerState"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from customer
+    where customer_id = #{customerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oukele.model.Customer">
+    insert into customer (customer_id, customer_user, customer_password, 
+      customer_name, customer_photo, customer_tel, 
+      customer_card)
+    values (#{customerId,jdbcType=INTEGER}, #{customerUser,jdbcType=VARCHAR}, #{customerPassword,jdbcType=VARCHAR}, 
+      #{customerName,jdbcType=VARCHAR}, #{customerPhoto,jdbcType=VARCHAR}, #{customerTel,jdbcType=VARCHAR}, 
+      #{customerCard,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.oukele.model.Customer">
+    update customer
+    set customer_user = #{customerUser,jdbcType=VARCHAR},
+      customer_password = #{customerPassword,jdbcType=VARCHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      customer_photo = #{customerPhoto,jdbcType=VARCHAR},
+      customer_tel = #{customerTel,jdbcType=VARCHAR},
+      customer_card = #{customerCard,jdbcType=VARCHAR}
+    where customer_id = #{customerId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateCustomerState">
+    update customer
+    set customer_state = #{customerState,jdbcType=BIT}
+    where customer_id = #{customerId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select customer_id, customer_user, customer_password, customer_name, customer_photo, 
+    customer_tel, customer_card
+    from customer
+    where customer_id = #{customerId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from customer
+  </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(*) from customer
+    </select>
+
+  <select id="searchText" resultMap="BaseResultMap">
+      select * from customer
+	where customer_user like concat('%',#{searchName},'%')
+	or customer_name like concat('%',#{searchName},'%')
+	or customer_tel like concat('%',#{searchName},'%')
+	or customer_card like concat('%',#{searchName},'%')
+  </select>
+
+  <select id="searchTotal" resultType="java.lang.Integer">
+   select count(*) from customer
+      where customer_user like concat('%',#{searchName},'%')
+      or customer_name like concat('%',#{searchName},'%')
+      or customer_tel like concat('%',#{searchName},'%')
+      or customer_card like concat('%',#{searchName},'%')
+  </select>
+
+</mapper>

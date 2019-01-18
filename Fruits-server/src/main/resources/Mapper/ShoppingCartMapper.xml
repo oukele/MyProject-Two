@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.ShoppingCartMapper">
+  <resultMap id="BaseResultMap" type="com.oukele.model.ShoppingCart">
+    <id column="shopping_cart_id" jdbcType="INTEGER" property="shoppingCartId" />
+    <result column="shopping_cart_count" jdbcType="INTEGER" property="shoppingCartCount" />
+    <result column="shopping_cart_status" jdbcType="BIT" property="shoppingCartStatus" />
+    <result column="commodity_id" jdbcType="INTEGER" property="commodityId" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from shopping_cart
+    where shopping_cart_id = #{shoppingCartId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oukele.model.ShoppingCart">
+    insert into shopping_cart (shopping_cart_id, shopping_cart_count, 
+      shopping_cart_status, commodity_id, customer_id
+      )
+    values (#{shoppingCartId,jdbcType=INTEGER}, #{shoppingCartCount,jdbcType=INTEGER}, 
+      #{shoppingCartStatus,jdbcType=BIT}, #{commodityId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.oukele.model.ShoppingCart">
+    update shopping_cart
+    set shopping_cart_count = #{shoppingCartCount,jdbcType=INTEGER},
+      shopping_cart_status = #{shoppingCartStatus,jdbcType=BIT},
+      commodity_id = #{commodityId,jdbcType=INTEGER},
+      customer_id = #{customerId,jdbcType=INTEGER}
+    where shopping_cart_id = #{shoppingCartId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select shopping_cart_id, shopping_cart_count, shopping_cart_status, commodity_id, 
+    customer_id
+    from shopping_cart
+    where shopping_cart_id = #{shoppingCartId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select shopping_cart_id, shopping_cart_count, shopping_cart_status, commodity_id, 
+    customer_id
+    from shopping_cart
+  </select>
+</mapper>

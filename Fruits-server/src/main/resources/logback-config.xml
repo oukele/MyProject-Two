@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration >
+    <property name="LOG_HOME" value="tp/log"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender" >
+        <!-- 输出的格式 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}: %msg%n</pattern>-->
+            <pattern>
+                %msg%n
+            </pattern>
+
+        </encoder>
+    </appender>
+
+    <!-- 监控 哪些包中的方法调用 输出日志 -->
+    <logger name="com.oukele.dao" level="DEBUG" additivity="false">
+        <!--<level value="INFO" />-->
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <root level="error"  additivity="false" >
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

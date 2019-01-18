@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.oukele.model.Order">
+    <id column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="order_datetime" jdbcType="TIMESTAMP" property="orderDatetime" />
+    <result column="order_price" jdbcType="DECIMAL" property="orderPrice" />
+    <result column="order_status" jdbcType="BIT" property="orderStatus" />
+    <result column="shopping_cart_id" jdbcType="INTEGER" property="shoppingCartId" />
+    <result column="express_id" jdbcType="INTEGER" property="expressId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oukele.model.Order">
+    insert into order (order_id, order_datetime, order_price, 
+      order_status, shopping_cart_id, express_id
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{orderDatetime,jdbcType=TIMESTAMP}, #{orderPrice,jdbcType=DECIMAL}, 
+      #{orderStatus,jdbcType=BIT}, #{shoppingCartId,jdbcType=INTEGER}, #{expressId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.oukele.model.Order">
+    update order
+    set order_datetime = #{orderDatetime,jdbcType=TIMESTAMP},
+      order_price = #{orderPrice,jdbcType=DECIMAL},
+      order_status = #{orderStatus,jdbcType=BIT},
+      shopping_cart_id = #{shoppingCartId,jdbcType=INTEGER},
+      express_id = #{expressId,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select order_id, order_datetime, order_price, order_status, shopping_cart_id, express_id
+    from order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select order_id, order_datetime, order_price, order_status, shopping_cart_id, express_id
+    from order
+  </select>
+</mapper>

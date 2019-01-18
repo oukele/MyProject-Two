@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.SupplierMapper">
+
+    <resultMap id="BaseResultMap" type="com.oukele.model.Supplier">
+        <id column="supplier_id" jdbcType="INTEGER" property="supplierId"/>
+        <result column="supplier_name" jdbcType="VARCHAR" property="supplierName"/>
+        <result column="supplier_address" jdbcType="VARCHAR" property="supplierAddress"/>
+        <result column="supplier_tel" jdbcType="VARCHAR" property="supplierTel"/>
+        <result column="supplier_status" jdbcType="BIT" property="supplierStatus"/>
+        <result column="supplier_remarks" jdbcType="VARCHAR" property="supplierRemarks"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from supplier
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insert" parameterType="com.oukele.model.Supplier" keyColumn="supplierId'" useGeneratedKeys="true">
+    insert into supplier (supplier_name, supplier_address,
+      supplier_tel, supplier_remarks
+      )
+    values (#{supplierName,jdbcType=VARCHAR}, #{supplierAddress,jdbcType=VARCHAR},
+      #{supplierTel,jdbcType=VARCHAR}, #{supplierRemarks,jdbcType=VARCHAR}
+      )
+  </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.oukele.model.Supplier">
+    update supplier
+    set supplier_name = #{supplierName,jdbcType=VARCHAR},
+      supplier_address = #{supplierAddress,jdbcType=VARCHAR},
+      supplier_tel = #{supplierTel,jdbcType=VARCHAR},
+      supplier_remarks = #{supplierRemarks,jdbcType=VARCHAR}
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </update>
+
+    <update id="updateSupplierStatus">
+        update supplier
+        set supplier_status = #{supplierStatus,jdbcType=BIT}
+        where supplier_id = #{supplierId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select supplier_id, supplier_name, supplier_address, supplier_tel, supplier_status, 
+    supplier_remarks
+    from supplier
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select supplier_id, supplier_name, supplier_address, supplier_tel, supplier_status, 
+    supplier_remarks
+    from supplier
+  </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+          select count(*) from supplier
+    </select>
+
+    <select id="selectSupplierStatus" resultMap="BaseResultMap">
+        select * from supplier where supplier_status = #{supplierStatus};
+    </select>
+
+    <select id="selectSupplierAddress" resultMap="BaseResultMap">
+        select * from supplier where supplier_address like concat('%',#{supplierAddress},'%')
+    </select>
+
+</mapper>

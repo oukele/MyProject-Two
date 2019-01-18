@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.AdminMapper">
+  <resultMap id="BaseResultMap" type="com.oukele.model.Admin">
+    <id column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="admin_user" jdbcType="VARCHAR" property="adminUser" />
+    <result column="admin_password" jdbcType="VARCHAR" property="adminPassword" />
+    <result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+    <result column="admin_tel" jdbcType="VARCHAR" property="adminTel" />
+    <result column="admin_photo" jdbcType="VARCHAR" property="adminPhoto" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admin
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oukele.model.Admin">
+    insert into admin (admin_id, admin_user, admin_password, 
+      admin_name, admin_tel, admin_photo
+      )
+    values (#{adminId,jdbcType=INTEGER}, #{adminUser,jdbcType=VARCHAR}, #{adminPassword,jdbcType=VARCHAR}, 
+      #{adminName,jdbcType=VARCHAR}, #{adminTel,jdbcType=VARCHAR}, #{adminPhoto,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.oukele.model.Admin">
+    update admin
+    set admin_user = #{adminUser,jdbcType=VARCHAR},
+      admin_password = #{adminPassword,jdbcType=VARCHAR},
+      admin_name = #{adminName,jdbcType=VARCHAR},
+      admin_tel = #{adminTel,jdbcType=VARCHAR},
+      admin_photo = #{adminPhoto,jdbcType=VARCHAR}
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+
+  <select id="login" resultType="com.oukele.model.Admin">
+      select admin_id, admin_user, admin_name, admin_tel, admin_photo
+    from admin
+    where admin_user = #{adminUser,jdbcType=INTEGER} and admin_password = #{adminPassword,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select admin_id, admin_user, admin_password, admin_name, admin_tel, admin_photo
+    from admin
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select admin_id, admin_user, admin_password, admin_name, admin_tel, admin_photo
+    from admin
+  </select>
+
+    <select id="selectByAdminUser" resultType="java.lang.Integer">
+      select count(*) from admin where admin_user = #{adminUser}
+    </select>
+
+</mapper>

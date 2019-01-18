@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.PurchaseMapper">
+
+    <resultMap id="BaseResultMap" type="com.oukele.model.Purchase">
+        <id column="purchase_id" jdbcType="INTEGER" property="purchaseId"/>
+        <result column="purchase_count" jdbcType="DOUBLE" property="purchaseCount"/>
+        <result column="purchase_status" jdbcType="BIT" property="purchaseStatus"/>
+        <result column="purchase_name" jdbcType="VARCHAR" property="purchaseName"/>
+        <result column="commodity_company_id" jdbcType="INTEGER" property="commodityCompanyId"/>
+        <result column="commodity_tag_id" javaType="INTEGER" property="commodityTagId"/>
+        <result column="supplier_id" jdbcType="INTEGER" property="supplierId"/>
+        <association property="commodityCompany" resultMap="com.oukele.dao.CommodityCompanyMapper.BaseResultMap"/>
+        <association property="commodityTag" resultMap="com.oukele.dao.CommodityTagMapper.BaseResultMap"/>
+        <association property="supplier" resultMap="com.oukele.dao.SupplierMapper.BaseResultMap"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from purchase
+    where purchase_id = #{purchaseId,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insert" parameterType="com.oukele.model.Purchase">
+    insert into purchase (purchase_count,
+      purchase_name, commodity_company_id, supplier_id,commodity_tag_id
+      )
+    values ( #{purchaseCount,jdbcType=DOUBLE},
+      #{purchaseName,jdbcType=VARCHAR}, #{commodityCompanyId,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER},
+      #{commodityTagId,jdbcType=INTEGER}
+      )
+  </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.oukele.model.Purchase">
+    update purchase
+      set purchase_count = #{purchaseCount,jdbcType=DOUBLE},
+        purchase_name = #{purchaseName,jdbcType=VARCHAR},
+        commodity_company_id = #{commodityCompanyId,jdbcType=INTEGER},
+        supplier_id = #{supplierId,jdbcType=INTEGER},
+        commodity_tag_id =  #{commodityTagId,jdbcType=INTEGER}
+      where purchase_id = #{purchaseId,jdbcType=INTEGER}
+  </update>
+
+    <update id="updatePurchaseStatus">
+    update purchase
+      set
+        purchase_status = #{purchaseStatus,jdbcType=BIT}
+    where purchase_id = #{purchaseId,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select <include refid="select_pre"></include>  from purchase p
+        left join supplier s on p.supplier_id = s.supplier_id
+        left join commodity_company c on p.commodity_company_id = c.commodity_company_id
+        left join commodity_tag ct on p.commodity_tag_id = ct.commodity_tag_id
+        where purchase_id = #{purchaseId,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="select_pre"></include>  from purchase p
+      left join supplier s on p.supplier_id = s.supplier_id
+      left join commodity_company c on p.commodity_company_id = c.commodity_company_id
+      left join commodity_tag ct on p.commodity_tag_id = ct.commodity_tag_id
+</select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+      select count(*) from purchase
+  </select>
+
+    <select id="searchPurchase" resultMap="BaseResultMap">
+      select * from purchase p
+            left join supplier s on p.supplier_id = s.supplier_id
+            left join commodity_company c on p.commodity_company_id = c.commodity_company_id
+            left join commodity_tag ct on p.commodity_tag_id = ct.commodity_tag_id
+            where p.purchase_name like concat('%',#{searchName},'%')
+            or  s.supplier_name like concat('%',#{searchName},'%')
+            or  ct.commodity_tag_name like concat('%',#{searchName},'%')
+  </select>
+
+    <select id="getSearchTotal" resultType="java.lang.Integer">
+        select count(*) from purchase p
+            left join supplier s on p.supplier_id = s.supplier_id
+            left join commodity_company c on p.commodity_company_id = c.commodity_company_id
+            left join commodity_tag ct on p.commodity_tag_id = ct.commodity_tag_id
+            where p.purchase_name like concat('%',#{searchName},'%')
+            or  s.supplier_name like concat('%',#{searchName},'%')
+            or  ct.commodity_tag_name like concat('%',#{searchName},'%')
+    </select>
+
+    <sql id="select_pre" >
+        p.purchase_id,p.purchase_count,p.purchase_status,p.purchase_name,p.commodity_company_id,p.commodity_tag_id,p.supplier_id,
+        s.supplier_id,s.supplier_name,s.supplier_address,s.supplier_tel,s.supplier_status,s.supplier_remarks,
+        c.commodity_company_id, c.commodity_company_name,
+        ct.commodity_tag_id,ct.commodity_tag_name
+    </sql>
+
+    <select id="selectPurchaseStatus" resultMap="BaseResultMap">
+        select
+                p.purchase_id,p.purchase_count,p.purchase_status,p.purchase_name,p.commodity_company_id,p.commodity_tag_id,p.supplier_id,
+                s.supplier_id,s.supplier_name,s.supplier_address,s.supplier_tel,s.supplier_status,s.supplier_remarks,
+                c.commodity_company_id, c.commodity_company_name,
+                ct.commodity_tag_id,ct.commodity_tag_name
+            from purchase p
+            left join supplier s on p.supplier_id = s.supplier_id
+            left join commodity_company c on p.commodity_company_id = c.commodity_company_id
+            left join commodity_tag ct on p.commodity_tag_id = ct.commodity_tag_id
+            where p.purchase_status = #{purchaseStatus};
+    </select>
+
+</mapper>

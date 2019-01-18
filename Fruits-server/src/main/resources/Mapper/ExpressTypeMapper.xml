@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.ExpressTypeMapper">
+  <resultMap id="BaseResultMap" type="com.oukele.model.ExpressType">
+    <id column="express_type_id" jdbcType="INTEGER" property="expressTypeId" />
+    <result column="express_type_name" jdbcType="VARCHAR" property="expressTypeName" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from express_type
+    where express_type_id = #{expressTypeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oukele.model.ExpressType">
+    insert into express_type (express_type_id, express_type_name)
+    values (#{expressTypeId,jdbcType=INTEGER}, #{expressTypeName,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.oukele.model.ExpressType">
+    update express_type
+    set express_type_name = #{expressTypeName,jdbcType=VARCHAR}
+    where express_type_id = #{expressTypeId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select express_type_id, express_type_name
+    from express_type
+    where express_type_id = #{expressTypeId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select express_type_id, express_type_name
+    from express_type
+  </select>
+</mapper>

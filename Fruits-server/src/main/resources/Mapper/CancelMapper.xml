@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.CancelMapper">
+  <resultMap id="BaseResultMap" type="com.oukele.model.Cancel">
+    <id column="cancel_id" jdbcType="INTEGER" property="cancelId" />
+    <result column="cancel_datetime" jdbcType="TIMESTAMP" property="cancelDatetime" />
+    <result column="cancel_remarks" jdbcType="VARCHAR" property="cancelRemarks" />
+    <result column="cancel_status" jdbcType="BIT" property="cancelStatus" />
+    <result column="oder_id" jdbcType="INTEGER" property="oderId" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cancel
+    where cancel_id = #{cancelId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oukele.model.Cancel">
+    insert into cancel (cancel_id, cancel_datetime, cancel_remarks, 
+      cancel_status, oder_id, customer_id
+      )
+    values (#{cancelId,jdbcType=INTEGER}, #{cancelDatetime,jdbcType=TIMESTAMP}, #{cancelRemarks,jdbcType=VARCHAR}, 
+      #{cancelStatus,jdbcType=BIT}, #{oderId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.oukele.model.Cancel">
+    update cancel
+    set cancel_datetime = #{cancelDatetime,jdbcType=TIMESTAMP},
+      cancel_remarks = #{cancelRemarks,jdbcType=VARCHAR},
+      cancel_status = #{cancelStatus,jdbcType=BIT},
+      oder_id = #{oderId,jdbcType=INTEGER},
+      customer_id = #{customerId,jdbcType=INTEGER}
+    where cancel_id = #{cancelId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select cancel_id, cancel_datetime, cancel_remarks, cancel_status, oder_id, customer_id
+    from cancel
+    where cancel_id = #{cancelId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select cancel_id, cancel_datetime, cancel_remarks, cancel_status, oder_id, customer_id
+    from cancel
+  </select>
+</mapper>

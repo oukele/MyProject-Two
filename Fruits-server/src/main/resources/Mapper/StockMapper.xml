@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.StockMapper">
+
+    <resultMap id="BaseResultMap" type="com.oukele.model.Stock">
+        <id column="stock_id" jdbcType="INTEGER" property="stockId"/>
+        <result column="stock_count" jdbcType="DOUBLE" property="stockCount"/>
+        <result column="stock_remarks" jdbcType="VARCHAR" property="stockRemarks"/>
+        <result column="stock_datetime" jdbcType="TIMESTAMP" property="stockDatetime"/>
+        <result column="purchase_id" jdbcType="INTEGER" property="purchaseId"/>
+        <result column="commodity_tag_id" jdbcType="INTEGER" property="commodityTagId"/>
+        <result column="commodity_company_id" jdbcType="INTEGER" property="commodityCompanyId"/>
+        <association property="commodityTag" resultMap="com.oukele.dao.CommodityTagMapper.BaseResultMap"/>
+        <association property="commodityCompany" resultMap="com.oukele.dao.CommodityCompanyMapper.BaseResultMap"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from stock
+    where stock_id = #{stockId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.oukele.model.Stock">
+    insert into stock (stock_id, stock_count, stock_remarks, purchase_id, commodity_tag_id,commodity_company_id
+      )
+    values (#{stockId,jdbcType=INTEGER}, #{stockCount,jdbcType=DOUBLE}, #{stockRemarks,jdbcType=VARCHAR}, 
+       #{purchaseId,jdbcType=INTEGER}, #{commodityTagId,jdbcType=INTEGER},#{commodityCompanyId,jdbcType=INTEGER}
+      )
+  </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.oukele.model.Stock">
+    update stock
+    set
+      stock_remarks = #{stockRemarks,jdbcType=VARCHAR}
+    where stock_id = #{stockId,jdbcType=INTEGER}
+  </update>
+
+    <update id="updateStockCommodityCount" parameterType="com.oukele.model.Stock">
+        update stock
+      set stock_count = #{stockCount,jdbcType=DOUBLE}
+      where stock_id = #{stockId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      select * from stock s
+	    left join commodity_tag t on s.commodity_tag_id = t.commodity_tag_id
+	    left join commodity_company cp on s.commodity_company_id = cp.commodity_company_id
+	    where stock_id = #{stockId,jdbcType=INTEGER}
+
+  </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+    select * from stock s
+        left join commodity_tag ct on ct.commodity_tag_id = s.commodity_tag_id
+        left join commodity_company cp on cp.commodity_company_id = s.commodity_company_id
+  </select>
+
+    <select id="selectCommodityCount" resultType="com.oukele.model.Stock">
+         select * from stock where stock_id = #{stockId,jdbcType=INTEGER}
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+          select count(*) from stock
+    </select>
+
+    <select id="selectSearch" resultMap="BaseResultMap">
+        select * from stock s
+            left join commodity_tag ct on ct.commodity_tag_id = s.commodity_tag_id
+            left join commodity_company cp on cp.commodity_company_id = s.commodity_company_id
+            where ct.commodity_tag_name like concat('%',#{searchText},'%')
+            or cp.commodity_company_name like concat('%',#{searchText},'%');
+    </select>
+
+</mapper>

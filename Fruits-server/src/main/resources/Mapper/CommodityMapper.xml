@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oukele.dao.CommodityMapper">
+
+    <resultMap id="BaseResultMap" type="com.oukele.model.Commodity">
+        <id column="commodity_id" jdbcType="INTEGER" property="commodityId"/>
+        <result column="commodity_name" jdbcType="VARCHAR" property="commodityName"/>
+        <result column="commodity_photo" jdbcType="VARCHAR" property="commodityPhoto"/>
+        <result column="commodity_price" jdbcType="DECIMAL" property="commodityPrice"/>
+        <result column="commodity_count" jdbcType="DOUBLE" property="commodityCount"/>
+        <result column="commodity_status" jdbcType="BIT" property="commodityStatus"/>
+        <result column="stock_id" jdbcType="INTEGER" property="stockId"/>
+        <result column="commodity_company_id" jdbcType="INTEGER" property="commodityCompanyId"/>
+        <association property="commodityCompany" resultMap="com.oukele.dao.CommodityCompanyMapper.BaseResultMap"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from commodity
+    where commodity_id = #{commodityId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.oukele.model.Commodity">
+    insert into commodity (commodity_id, commodity_name, commodity_photo, 
+      commodity_price, commodity_count,
+      stock_id, commodity_company_id)
+    values (#{commodityId,jdbcType=INTEGER}, #{commodityName,jdbcType=VARCHAR}, #{commodityPhoto,jdbcType=VARCHAR}, 
+      #{commodityPrice,jdbcType=DECIMAL}, #{commodityCount,jdbcType=DOUBLE},
+      #{stockId,jdbcType=INTEGER}, #{commodityCompanyId,jdbcType=INTEGER})
+  </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.oukele.model.Commodity">
+    update commodity
+    set commodity_name = #{commodityName,jdbcType=VARCHAR},
+      commodity_photo = #{commodityPhoto,jdbcType=VARCHAR},
+      commodity_price = #{commodityPrice,jdbcType=DECIMAL},
+      commodity_count = #{commodityCount,jdbcType=DOUBLE}
+    where commodity_id = #{commodityId,jdbcType=INTEGER}
+  </update>
+
+    <update id="updateCommodityStatus">
+      update commodity set commodity_status = #{commodityStatus,jdbcType=BIT} where commodity_id= #{commodityId,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select commodity_id, commodity_name, commodity_photo, commodity_price, commodity_count, 
+    commodity_status, stock_id, commodity_company_id
+    from commodity
+    where commodity_id = #{commodityId,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+    select * from commodity c
+	left join commodity_company cp on c.commodity_company_id=cp.commodity_company_id
+  </select>
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(*) from commodity
+    </select>
+
+
+</mapper>
